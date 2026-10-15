@@ -1,0 +1,9 @@
+/* Jetons de design utilisés par ce composant. Valeurs reprises du projet
+   d'origine (Mecarungis, charte corail) — à adapter à la marque du nouveau
+   projet. */
+:root {
+    --couleur-marque: #EA5455;
+    --couleur-texte: #000;
+    --degrade-surface: linear-gradient(#fffc, #e7e7e752, #fffc);
+    --ombre-posee: 0 0 15px -8px #000;
+}

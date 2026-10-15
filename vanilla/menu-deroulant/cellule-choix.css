@@ -1,0 +1,42 @@
+/* ============================================================
+   Atome « cellule de choix » : case cliquable d'une grille ou d'une colonne
+   de valeurs — un jour du calendrier (`.daterange__day`), une heure ou une
+   minute du sélecteur (`.selecteur-heure__entree`). Les deux portaient
+   exactement les mêmes quatorze propriétés, recopiées.
+
+   Le remplissage orange part du centre et se déploie vers les côtés : au
+   repos la largeur du dégradé est nulle, ancrée au centre ; l'état rempli la
+   porte à 100 %. Si le pointeur quitte la cellule sans sélection, la
+   transition inverse (native, sans JS) la rétracte des côtés vers le centre.
+
+   Le SURVOL n'est pas ici : chaque consommateur a ses propres exclusions (le
+   calendrier ne doit pas réagir sur une case vide), et une règle commune
+   obligerait ensuite à la contredire. L'état rempli, lui, est partagé.
+   ============================================================ */
+
+.cellule-choix {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    height: 2rem;
+    margin: 0;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    font-size: inherit;
+    font-family: inherit;
+    color: var(--couleur-texte);
+    border-radius: var(--rayon-s);
+    background: linear-gradient(var(--couleur-marque), var(--couleur-marque)) center / 0% 100% no-repeat;
+    transition: background-size 0.2s ease-in-out;
+}
+
+/* Rempli : même valeur finale que le survol, donc aucun conflit de
+   spécificité entre les deux (ils visent la même propriété vers la même
+   valeur). Le texte ne change jamais de couleur — convention de toute
+   l'application (filtre par statut, `.btn`), seul le fond s'anime. */
+.cellule-choix--active {
+    background-size: 100% 100%;
+}

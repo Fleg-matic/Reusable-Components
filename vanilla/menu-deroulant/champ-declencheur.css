@@ -1,0 +1,111 @@
+/* ============================================================
+   Champ déclencheur du menu déroulant : libellé flottant, valeur
+   affichée en permanence, soulignement animé à l'ouverture, et la
+   flèche (chevron en CSS pur, deux traits de 2px formant un V) qui
+   pivote et change de couleur à l'ouverture.
+
+   Classes préfixées `.daterange__*` — nom hérité de son origine (un
+   sélecteur de plage de dates), conservé tel quel en le portant ici :
+   le renommer aurait exigé de retoucher le JS en le recopiant, au
+   risque d'une erreur de frappe qui casse la synchronisation JS/CSS.
+   Rien dans ces classes n'est spécifique aux dates : c'est le champ
+   déclencheur générique de toute la famille de sélecteurs (menu
+   déroulant, sélecteur d'heure, calendrier).
+   ============================================================ */
+
+.daterange {
+    position: relative;
+    margin: 1rem 0;
+    width: 100%;
+}
+
+.daterange__label {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    color: var(--couleur-texte-secondaire);
+    pointer-events: none;
+}
+
+.daterange__field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid var(--couleur-bordure);
+    padding: 5px 0;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: var(--texte-l);
+    color: var(--couleur-texte);
+}
+
+.daterange__value {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* La flèche : deux traits de 2px inclinés à ±45° formant un V. La
+   rotation se fait en `transition` simple sur `transform`, réversible
+   dans les deux sens sans JS supplémentaire (le JS ne fait que poser/
+   retirer la classe `.daterange--open` sur la racine). */
+.daterange__trigger {
+    position: relative;
+    flex-shrink: 0;
+    width: 0.6rem;
+    height: 0.6rem;
+}
+
+.daterange__trigger::before,
+.daterange__trigger::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 2px;
+    height: 0.42rem;
+    background: var(--couleur-texte-discret);
+    transform-origin: top center;
+    transition: transform 0.3s ease, background-color 0.2s ease;
+}
+
+.daterange__trigger::before {
+    left: 0;
+    transform: rotate(-45deg);
+}
+
+.daterange__trigger::after {
+    right: 0;
+    transform: rotate(45deg);
+}
+
+.daterange__underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background-color: var(--couleur-marque);
+    transform: scaleX(0);
+    transition: all 0.3s ease;
+}
+
+.daterange--open .daterange__underline {
+    transform: scaleX(1);
+}
+
+.daterange--open .daterange__trigger::before,
+.daterange--open .daterange__trigger::after {
+    background: var(--couleur-marque);
+}
+
+.daterange--open .daterange__trigger::before {
+    transform: rotate(225deg);
+}
+
+.daterange--open .daterange__trigger::after {
+    transform: rotate(-225deg);
+}

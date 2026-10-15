@@ -1,0 +1,107 @@
+/* ============================================================
+   Molécule : Filtre par statut — Interface de rejeu
+   Facturation Électronique
+   MOBILE FIRST STRICT : uniquement des @media (min-width).
+   ============================================================ */
+
+/* ============================================================
+   Règle de filtre par statut (liste « Factures en erreur »)
+   Segments de même largeur, sans contour. Le remplissage orange
+   est porté par un curseur qui coulisse sous le segment actif
+   (variable CSS --index-actif posée par le JS).
+   ============================================================ */
+.statut-filtre {
+    position: relative;
+    display: flex;
+    /* Pleine largeur du conteneur, sans plafond propre : même référence que
+       `.warning` et `.liste-factures__liste` (aucune des deux ne limite sa
+       largeur non plus, toutes deux tiennent la largeur de `.container`). */
+    width: 100%;
+    margin: 1rem auto;
+    gap: 0;
+    box-shadow: var(--ombre-posee);
+    background: var(--degrade-surface);
+}
+
+/* Le sous-filtre de niveau 2 (voir filtre-statut-hierarchique.js) doit
+   réserver son emplacement en permanence : la liste en dessous ne doit pas
+   se décaler selon que « Défauts » est actif ou non. `visibility: hidden`
+   (jamais `display: none`) le rend invisible et non interactif sans retirer
+   son espace du flux. */
+.statut-filtre--invisible {
+    visibility: hidden;
+}
+
+.statut-filtre__curseur {
+    /* Largeur = un segment (1/N de la largeur totale, N posé par le JS via
+       --nb-segments) ; `translateX` en pourcentage se calcule par rapport à
+       la largeur de l'ÉLÉMENT LUI-MÊME (le curseur), donc « avancer de 100% »
+       avance exactement d'un segment quel que soit N — pas besoin de
+       connaître la largeur réelle en pixels. */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: calc(100% / var(--nb-segments, 4));
+    background: var(--degrade-curseur, linear-gradient(#EA5455A8, #EA545563, #EA545540, #EA545563, #EA5455A8));
+    transition: transform 0.5s;
+    transform: translateX(calc(var(--index-actif, 0) * 100%));
+    pointer-events: none;
+    box-shadow: -5px 0 12px -10px var(--couleur-texte), 5px 0 12px -10px var(--couleur-texte);
+}
+
+.statut-filtre__btn {
+    /* `flex: 1 1 0` partage la largeur du conteneur à parts égales entre tous
+       les segments, quel que soit leur nombre (4 pour le filtre historique,
+       5 pour le niveau 1 hiérarchique, 3 pour le niveau 2) : tout tient
+       toujours sur la largeur de l'écran, mobile first — jamais de
+       débordement ni de défilement. `min-width: 0` autorise le texte à
+       retourner à la ligne plutôt que de forcer le segment à s'élargir. */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0.3rem 0.15rem;
+    border: none;
+    background: transparent;
+    color: var(--couleur-texte);
+    font-size: inherit;
+    line-height: 1.2;
+    font-family: inherit;
+    text-align: center;
+    cursor: pointer;
+}
+
+.statut-filtre__btn:focus-visible {
+    outline: 2px solid var(--couleur-marque);
+    outline-offset: 2px;
+}
+
+/* Le remplissage orange vient du curseur qui coulisse en dessous (ordre du DOM) ;
+   le segment actif n'a plus besoin de son propre fond. */
+.statut-filtre__btn--actif {
+    /* aucune propriété propre : conservée comme sélecteur pour le JS/les tests,
+       le remplissage visuel est entièrement porté par .statut-filtre__curseur. */
+}
+
+@media (min-width: 1024px) {
+    /* Segments à largeur fixe (10rem) réservés au desktop : le partage
+       flexible (`flex: 1 1 0`, ci-dessus) résout un débordement qui ne se
+       limite pas au téléphone — 5 segments à 10rem (50rem = 800px) dépassent
+       aussi une tablette portrait (~768px), d'où le seuil aligné sur celui
+       de la bascule de navigation desktop de app-bar.css (1024px), pas 640px
+       comme avant (« Desktop inchangé depuis le lot 12B ») : le partage
+       flexible reste actif sur toute la plage tablette. */
+    .statut-filtre {
+        width: fit-content;
+        max-width: none;
+    }
+
+    .statut-filtre__btn {
+        flex: 0 0 10rem;
+        width: 10rem;
+        padding: 0.35rem 0.85rem;
+    }
+}

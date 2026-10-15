@@ -1,0 +1,46 @@
+/* ============================================================
+   Molécule « sélecteur de choix » : un champ cliquable qui ouvre un panneau
+   de valeurs, dans le cadre `.daterange__*` du calendrier et du sélecteur
+   d'heure. Classes neuves préfixées `selecteur-choix__*`.
+   Mobile-first strict : uniquement des @media (min-width).
+   ============================================================ */
+
+.selecteur-choix {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 10rem;
+    max-height: 12rem;
+    overflow-y: auto;
+    /* Défilement conservé, barre de scroll masquée (Firefox). */
+    scrollbar-width: none;
+}
+
+/* Barre de scroll masquée (Chrome/Safari/Edge) — même intention que
+   `scrollbar-width: none` ci-dessus, deux propriétés nécessaires selon le
+   moteur de rendu. */
+.selecteur-choix::-webkit-scrollbar {
+    display: none;
+}
+
+/* Sans libellé : `.daterange` réserve 1rem au-dessus pour le libellé, qui est
+   en `position: absolute` et ne pousse donc rien de lui-même. Cette marge
+   n'ayant plus d'objet, elle décalerait le champ vers le bas par rapport aux
+   autres éléments de la ligne. */
+.daterange--sans-libelle {
+    margin-top: 0;
+}
+
+/* L'apparence de l'entrée vit dans l'atome `.cellule-choix` (voir
+   atomes/cellule-choix.css), partagé avec les jours du calendrier et les
+   heures du sélecteur d'heure. Ne restent ici que ses états. */
+
+.selecteur-choix__entree:hover {
+    background-size: 100% 100%;
+}
+
+@media (min-width: 640px) {
+    .selecteur-choix {
+        max-height: 14rem;
+    }
+}

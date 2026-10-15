@@ -1,0 +1,19 @@
+/* ============================================================
+   Jetons de design utilisés par ce composant. À fusionner avec les
+   variables existantes du projet consommateur, ou à garder tel quel
+   si le projet n'en a pas encore. Valeurs reprises du projet d'origine
+   (Mecarungis, charte corail) — à adapter à la marque du nouveau projet.
+   ============================================================ */
+:root {
+    --couleur-marque: #EA5455;
+    --couleur-texte: #000;
+    --couleur-texte-secondaire: #333;
+    --couleur-texte-discret: #999;
+    --couleur-fond-carte: #fff;
+    --couleur-bordure: #ccc;
+    --couleur-separateur: #e6e6e675;
+    --texte-l: 1rem;
+    --rayon-s: 4px;
+    --rayon-m: 6px;
+    --ombre-carte: 5px 10px 30px -20px #000;
+}

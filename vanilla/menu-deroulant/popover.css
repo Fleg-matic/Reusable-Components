@@ -1,0 +1,75 @@
+/* ============================================================
+   Atome « popover » : panneau flottant générique ancré à un
+   déclencheur. Porte l'apparence (fond, largeur minimale, bordure,
+   ombre) et le positionnement. `position: fixed` le sort du flux
+   de son conteneur : il n'est plus rogné par `overflow-y: auto`
+   d'une modale et peut s'afficher par-dessus tout le reste.
+   `top`/`left` sont calculés en JS à l'ouverture (ancré sous le
+   déclencheur), pas posés en CSS.
+   Mobile-first strict : uniquement des @media (min-width).
+   ============================================================ */
+
+.popover {
+    position: fixed;
+    z-index: 350;
+    min-width: 165px;
+    background: var(--couleur-fond-carte);
+    border: 1px solid var(--couleur-separateur);
+    border-radius: var(--rayon-m);
+    box-shadow: var(--ombre-carte);
+}
+
+@media (min-width: 640px) {
+    .popover {
+        min-width: 200px;
+    }
+}
+
+.popover[hidden] {
+    display: none;
+}
+
+/* Effet d'ouverture : le panneau se déroule du haut vers le bas, comme un
+   store qui descend. La classe `.popover--anim` est posée par le JS à chaque
+   `ouvrir()` et retirée à `fermer()`, pour que l'animation se rejoue à chaque
+   affichage (même principe que `.infobulle--anim`). Vitesse constante
+   (`linear`, sans accélération/décélération), sur 0.2s. */
+.popover--anim {
+    /* Sans cet indice, le navigateur ne promeut pas toujours l'élément sur son
+       propre calque de composition pour une animation `clip-path` — d'où des
+       saccades malgré une forme compatible (`inset()`). Posé uniquement le
+       temps de l'animation (classe retirée ensuite par le JS), conformément à
+       la bonne pratique de ne pas le laisser en permanence. */
+    will-change: clip-path;
+    animation: popover-derouler 0.2s linear;
+}
+
+/* Fermeture : le store remonte (keyframes dédiés, symétriques de l'ouverture
+   — le mot-clé `animation-direction: reverse` ne s'interpole pas de façon
+   fiable ici, `clip-path` reste bloqué à sa valeur de fin tout du long lors
+   de vérifications réelles). Posée par le JS le temps de l'animation avant
+   de masquer réellement le panneau (`element.hidden = true`), voir
+   `positionnerFermeture`/`fermer` dans popover.js. Même durée/vitesse que
+   l'ouverture. */
+.popover--anim-fermeture {
+    will-change: clip-path;
+    animation: popover-enrouler 0.2s linear;
+}
+
+@keyframes popover-derouler {
+    from {
+        clip-path: inset(0 0 100% 0);
+    }
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes popover-enrouler {
+    from {
+        clip-path: inset(0 0 0 0);
+    }
+    to {
+        clip-path: inset(0 0 100% 0);
+    }
+}

@@ -1,0 +1,27 @@
+/* ============================================================
+   Atome « carte liste » : apparence commune à toutes les cartes affichées en
+   liste (factures — accordéon compris, grossistes, sélection de rejeu par
+   lot) — coins arrondis. Seule cette partie est ICI : `box-shadow` n'y
+   figure pas, chaque carte a TOUJOURS une variante d'état (statut de
+   facture, `--actif`/repos de grossiste) qui le redéclare en entier (la
+   propriété ne se cumule pas entre règles) — le poser aussi ici en base
+   aurait été mort (systématiquement écrasé), pas partagé. Pas de
+   `background` non plus, sur aucune carte : ni `.grossiste-card` ni
+   `.facture-item` n'en posent — transparentes, elles laissent voir le fond
+   de page derrière. `margin` n'y figure pas non plus : l'espacement entre cartes est
+   la responsabilité du CONTENEUR de liste (`gap`, voir liste-factures.css,
+   modale-grossistes.css, modale-rejeu-lot.css — les trois désormais
+   identiques), pas de la carte elle-même — une carte qui pose SA PROPRE
+   marge EN PLUS du `gap` du conteneur double l'espacement (bug constaté :
+   les grossistes avaient les deux à la fois). `min-height` n'y figure pas
+   non plus : cet atome est posé sur des
+   éléments de forme différente selon le contexte (`.grossiste-card` EST la
+   ligne visible, `.facture-item` est un conteneur d'accordéon dont la ligne
+   visible, `.facture-item__header`, est un niveau plus bas) — chaque ligne
+   réelle le déclare donc à l'endroit qui lui correspond (voir base.css et
+   carte-facture.css), avec la même valeur.
+   ============================================================ */
+.carte-liste {
+    border: none;
+    border-radius: var(--rayon-l);
+}

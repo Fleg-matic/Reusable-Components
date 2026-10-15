@@ -1,0 +1,58 @@
+/* ============================================================
+   Atome « ligne réglable » : apparence commune aux cartes d'une liste dont
+   chaque ligne se règle sur place — un grossiste (`.grossiste-card`), un
+   compte (`.compte-card`).
+
+   Ces propriétés décrivent « une ligne réglable dans une liste », pas « un
+   grossiste » : elles vivaient dans base.css sur `.grossiste-card` seul, et
+   `.compte-card` avait redéclaré sa propre mise en page sans rien de tout ça
+   (ni ombre, ni hauteur minimale, ni variante active) — les deux modales
+   faisaient pourtant la même chose. Recopier les valeurs d'un fichier à
+   l'autre aurait créé deux définitions qui divergent à la première retouche
+   (règle §11, DRY).
+
+   Ce qui n'est PAS ici, volontairement :
+   - `margin` : l'espacement entre cartes est la responsabilité du CONTENEUR
+     de liste (`gap`), jamais de la carte — les deux à la fois doublent
+     l'espacement (bug constaté sur les grossistes) ;
+   - `background` : aucune carte de liste n'en pose, elles laissent voir le
+     fond de page derrière ;
+   - `border`/`border-radius` : portés par l'atome `.carte-liste`, qui reste
+     la base d'apparence de toute carte de liste.
+
+   `box-shadow` ne se cumule pas entre règles : la variante `--actif` le
+   redéclare donc en entier, comme le font les statuts de facture.
+   ============================================================ */
+
+/* Mobile first : en ligne, les éléments d'une carte réglable ne tiennent plus
+   sur la largeur d'une modale mobile (constaté sur les grossistes : 350px de
+   contenu pour 197px de carte). Empilé en colonne, chaque élément dispose de
+   toute la largeur disponible ; la ligne redevient possible à partir de 640px,
+   où la carte a assez de place. */
+.ligne-reglable {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    min-height: 3.35rem;
+    text-align: center;
+    /* Inactif : même forme que « actif », teinte neutre (grise) plutôt que
+       l'absence d'ombre colorée. */
+    box-shadow: inset 0 0 30px -15px var(--couleur-inactif), var(--ombre-carte);
+}
+
+.ligne-reglable--actif {
+    box-shadow: inset 0 0 30px -15px var(--couleur-marque), var(--ombre-carte);
+}
+
+@media (min-width: 640px) {
+    .ligne-reglable {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+}
